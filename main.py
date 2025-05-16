@@ -108,7 +108,20 @@ def main():
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, spin_wheel))
     application.add_handler(CallbackQueryHandler(button_callback))
 
-    print("Bot is running...")
+    from flask import Flask
+    from threading import Thread
+
+    web_app = Flask(__name__)
+
+    @web_app.route('/')
+    def home():
+        return "Bot is running!"
+
+    def run():
+        web_app.run(host='0.0.0.0', port=8080)
+
+    Thread(target=run).start()
+    
     application.run_polling()
 
 if __name__ == "__main__":
